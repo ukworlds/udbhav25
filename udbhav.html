@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UDBHAV 2025 - College Events Showcase</title>
+    
+<script src="https://cdn.tailwindcss.com"></script>
+    
+<script src="https://unpkg.com/lucide@latest"></script>
+    
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for light overlay and backdrop */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5); /* Lighter overlay */
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+        /* Style for the main content container to ensure central alignment */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        /* Light Body Theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7; /* Very light gray background */
+            color: #1f2937; /* Dark text */
+            min-height: 10vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Premium Font for H1 */
+        #main-heading {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Ensure main content pushes the footer down */
+        main {
+            flex-grow: 1;
+        }
+        /* Custom style to center the "Powered By" text and allow the counter to be pushed right */
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center the middle element */
+            width: 100%;
+            position: relative; /* Needed for absolute positioning if we needed it, but flex is easier */
+        }
+        /* Helper class for mobile visibility */
+        .hidden-mobile {
+            display: none;
+        }
+        @media (min-width: 640px) { /* sm breakpoint */
+            .hidden-mobile {
+                display: block;
+            }
+        }
+
+    </style>
+</head>
+<body class="transition-all duration-300">
+
+    
+<header class="bg-white border-b border-gray-200 py-4 shadow-xl">
+        <div class="main-container flex items-center justify-between">
+            
+            
+<div class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0"> <!-- INCREASED SIZE HERE -->
+                <img src="gcoen.png" alt="Government College of Engineering, Nagpur Logo" class="h-full w-full object-contain">
+            </div>
+
+            
+<div class="flex-grow text-center mx-4">
+                <h1 id="main-heading" class="text-4xl sm:text-5xl font-extrabold text-blue-600 tracking-tight">UDBHAV 2025</h1>
+                <p class="mt-1 text-base text-gray-500 hidden sm:block">Igniting Innovation and Spirit</p>
+            </div>
+
+            
+<div class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0"> <!-- INCREASED SIZE HERE -->
+                <img src="cesa.png" alt="CESA Logo" class="h-full w-full object-contain">
+            </div>
+        </div>
+    </header>
+
+    
+<main class="main-container pt-8 pb-16">
+        <section class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Explore Our Exciting Events</h2>
+            <p class="text-md text-gray-600 max-w-3xl mx-auto">Click any card to view detailed rules, judging criteria, and coordinator contacts for that event.</p>
+        </section>
+
+        
+<div id="events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+
+</div>
+    </main>
+
+    
+<footer class="bg-gray-100 border-t border-gray-200 py-4">
+        <div class="main-container flex footer-content text-sm text-gray-600">
+            
+            
+<div class="font-medium text-center">
+                &copy; Powered by 
+                <a href="https://www.instagram.com/ujjwal_khaire_/" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors font-semibold">
+                    Ujjwal Khaire
+                </a>
+            </div>
+            
+            
+<div id="visit-counter" class="text-right text-base font-extrabold text-gray-900 tracking-wider absolute right-4 sm:right-0 ml-auto">
+                --
+            </div>
+        </div>
+    </footer>
+
+    
+<div id="event-modal" class="fixed inset-0 hidden items-center justify-center p-4 modal-overlay" onclick="closeModal(event)">
+        <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-xl shadow-2xl transform transition-all duration-300 overflow-y-auto border border-gray-300" onclick="event.stopPropagation()">
+
+            
+<div class="sticky top-0 bg-white p-6 border-b border-gray-200 flex justify-between items-center z-10">
+                <h3 id="modal-title" class="text-3xl font-bold text-blue-600 text-center w-full">Event Title</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 transition-colors p-2 rounded-full hover:bg-gray-100">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            
+<div id="modal-content" class="p-6 text-left">
+                
+
+</div>
+        </div>
+    </div>
+
+    
+<script type="module">
+        // Import necessary icons after the script is defined
+        lucide.createIcons();
+
+        // 1. Event Data Structure (Consolidated Information)
+        const eventsData = [
+            {
+                name: "Sab Khelo Sab Jeeto",
+                icon: "users",
+                color: "bg-red-600",
+                posterUrl: "https://placehold.co/600x400/ef4444/ffffff?text=Sab+Khelo+Poster",
+                description: "Inspired by the popular SAB TV show, this event is a blend of fun, competition, and teamwork with question rounds and physical challenges.",
+                details: [
+                    { title: "Team Size", content: "4 members per team. Not mandatory for all participants to belong to the same institution." },
+                    { title: "Registration Fees", content: "₹37 per participant or ₹149 per team of four." },
+                    {
+                        title: "Format", content: `
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>**Round 1 (Preliminary):** Four teams compete. First correct answer on sticky note qualifies for the game task. Remaining two teams go to the Lucky Loser List.</li>
+                                <li>**Round 2 (Semi-final):** Winners of Round 1 and lucky losers compete.</li>
+                                <li>**Round 3 (Final):** Winners of Round 2 compete in the final challenge.</li>
+                                </ul>
+                        `
+                    },
+                    { title: "Coordinators", content: "Harsha Chaudhari: 9226946538, Aarti Bhujade: 7219565729" },
+                    { title: "Special Instructions", content: "Teams must maintain uniformity by wearing same-coloured clothing. Report 30 minutes before start time. Late teams will not be entertained. Judges’ decisions are final." }
+                ]
+            },
+            {
+                name: "Free Fire - Clash Squad Showdown",
+                icon: "swords",
+                color: "bg-yellow-500",
+                posterUrl: "https://placehold.co/600x400/f59e0b/ffffff?text=Free+Fire+Showdown",
+                description: "Get ready for intense 4v4 action in Free Fire's Clash Squad mode. Every match is a knockout match.",
+                details: [
+                    { title: "Team Size", content: "4 players per team (Clash Squad Mode). Solo entries not allowed." },
+                    { title: "Registration Fees", content: "₹249 per team." },
+                    { title: "Mode & Map", content: "Mode: Clash Squad (Custom Room). Map: Only Bermuda." },
+                    {
+                        title: "Prohibited Rules", content: `
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Vector and grenades are **not** allowed.</li>
+                                <li>No height advantage. No gloo wall break.</li>
+                                <li>Emulator players or hackers will be disqualified.</li>
+                            </ul>
+                        `
+                    },
+                    { title: "Coordinators", content: "Arpit Dhonge: 7262023758, Atharv Lokhande: 7709787025" }
+                ]
+            },
+            {
+                name: "CAD Clash 2025",
+                icon: "ruler",
+                color: "bg-blue-600",
+                posterUrl: "https://placehold.co/600x400/2563eb/ffffff?text=CAD+Clash+Design",
+                description: "An AutoCAD design competition challenging technical precision, creativity, and understanding of engineering drawings.",
+                details: [
+                    { title: "Participation", content: "Individual participation only (single participant event)." },
+                    { title: "Registration Fees", content: "₹200 per participant." },
+                    {
+                        title: "Judging Criteria", content: `
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Accuracy and technical correctness of the drawing.</li>
+                                <li>Creativity and presentation quality.</li>
+                                <li>Time management.</li>
+                                <li>Proper use of AutoCAD tools and layers.</li>
+                            </ul>
+                        `
+                    },
+                    { title: "Key Rules", content: "Internet access is **not** allowed. Plagiarism leads to disqualification. Strictly adhere to the problem statement provided on the spot. Judges' decisions are final." },
+                    { title: "Coordinators", content: "Ayush Nerkar: 7666035792, Archit Dadhe: 7218482040" },
+                    { title: "Special Instructions", content: "Report 30 minutes before the event starts. Bring a valid college ID card." }
+                ]
+            },
+            {
+                name: "Brick Laying Event",
+                icon: "hammer",
+                color: "bg-amber-600",
+                posterUrl: "https://placehold.co/600x400/d97706/ffffff?text=Brick+Laying+Challenge",
+                description: "A competition designed to test participants' skill, precision, and speed in brick masonry by constructing a small brick structure.",
+                details: [
+                    { title: "Team Size", content: "2 to 3 members per team. Must be students of the hosting institution or registered guests." },
+                    { title: "Registration Fees", content: "₹500 per team." },
+                    { title: "Event Rounds", content: "Round 1: Basic brick wall construction to test skill and coordination" },
+                    {
+                        title: "Judging Criteria", content: `
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Accuracy of brick alignment and level.</li>
+                                <li>Quality of mortar joints.</li>
+                                <li>Structural stability and neatness.</li>
+                                <li>Overall workmanship.</li>
+                            </ul>
+                        `
+                    },
+                    { title: "Key Rules", content: "**Participants must bring their own safety gear (gloves, shoes, helmets).** Bricks, cement, and tools will be provided. Judges' decisions are final." },
+                    { title: "Coordinators", content: "Ritik Kapse: +91 9876543210, Smit lengure: +91 8766950044" }
+                ]
+            },
+            {
+                name: "TECHNICAL QUIZ",
+                icon: "lightbulb",
+                color: "bg-cyan-600",
+                posterUrl: "https://placehold.co/600x400/06b6d4/ffffff?text=TECHNICAL+QUIZ",
+                description: "A quiz competition covering general knowledge and current affairs across three challenging rounds.",
+                details: [
+                    { title: "Team Size", content: "2 members per team." },
+                    { title: "Registration Fees", content: "₹49." },
+                    {
+                        title: "Quiz Rounds", content: `
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>**Round 1 (Preliminary):** 10-minute written round, 20 objective questions. Top 10 teams qualify.</li>
+                                <li>**Round 2 (Rapid Fire):** 5 questions in 60 seconds (+10 for correct, no negative).</li>
+                                <li>**Round 3 (Buzzer/Visual/Audio):** Buzzer-based answering (+10 for correct, -5 for wrong).</li>
+                            </ul>
+                        `
+                    },
+                    { title: "Key Rules", content: "Use of mobile phones or electronic gadgets is **strictly prohibited**. Report 15 minutes before the start time. No spot entries after the deadline." },
+                    { title: "Coordinators", content: "Ritika Sataw: 8433811788, Suhani Gowardhan: 7588633248, Raj Thakare: 8552867400" }
+                ]
+            },
+            {
+                name: "BRIDGE-O-CRAFT",
+                icon: "construction",
+                color: "bg-lime-600",
+                posterUrl: "https://placehold.co/600x400/84cc16/ffffff?text=Bridge-O-Craft",
+                description: "Showcase your engineering skills by designing and constructing a load-bearing bridge using only popsticks and glue.",
+                details: [
+                    { title: "Team Size", content: "Up to 4 members (should not exceed 5)." },
+                    { title: "Materials", content: "Bridge must be constructed ONLY from Popsticks/Ice-cream sticks and glue (provided by organizers)." },
+                    { title: "Construction & Testing Time", content: "2 hours for construction and 2 hours for testing." },
+                    {
+                        title: "Design Criteria", content: `
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Length: Min 13 inches (33.02 cm) - Max 18 inches (45cm).</li>
+                                <li>Max Height: Cannot exceed 11.5cm.</li>
+                                <li>Joints: No sandwiching/Lap joint of sticks more than 3 (joint) or 2 (beam).</li>
+                            </ul>
+                        `
+                    },
+                    { title: "Judging Criteria", content: "Load-Bearing Capacity, Stability, Aesthetic Appeal, and Adherence to Design Criteria." },
+                    { title: "Coordinators", content: "Aditi Sonone: 7249201809, Jay Pathode: 7972390210" }
+                ]
+            },
+            {
+                name: "BGMI Tournament",
+                icon: "crosshair",
+                color: "bg-green-600",
+                posterUrl: "https://placehold.co/600x400/10b981/ffffff?text=BGMI+Tournament",
+                description: "A thrilling esports battle in classic TPP mode, testing teamwork, coordination, and strategic planning.",
+                details: [
+                    { title: "Team Size", content: "Squad of 4 players (max 1 substitute allowed). Open for all registered participants." },
+                    { title: "Registration Fees", content: "₹249 per team." },
+                    { title: "Mode", content: "Classic TPP (Third-Person Perspective)." },
+                    {
+                        title: "Judging Criteria Priority", content: `
+                            <ol class="list-decimal list-inside space-y-1">
+                                <li>Chicken Dinner count</li>
+                                <li>Total Kills</li>
+                                <li>Survival Time</li>
+                            </ol>
+                        `
+                    },
+                    { title: "Key Rules", content: "Use of hacks, third-party tools, or emulators will lead to instant disqualification. Join the custom room 10 minutes before match time." },
+                    { title: "Coordinators", content: "Atharva Patil: 8275354897, Devanshu Banwade: 7385049435" }
+                ]
+            },
+            {
+                name: "Treasure Trackers",
+                icon: "map",
+                color: "bg-purple-600",
+                posterUrl: "https://placehold.co/600x400/9333ea/ffffff?text=Treasure+Hunters",
+                description: "A classic physical adventure game where teams solve a chain of clues, riddles, and puzzles to find a hidden treasure.",
+                details: [
+                    { title: "Team Size", content: "4 members per team." },
+                    { title: "Registration Fees", content: "₹300 for team of 4 members." },
+                    {
+                        title: "Game Rounds", content: `
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>**Round 1 (Cryptic Clues):** Sequential clues leading to the final treasure location.</li>
+                                <li>**Round 2 (Hurdle Round):** Selected teams pass through a physical game/challenge.</li>
+                                <li>**Round 3 (Surprise Round):** Final round format revealed on time.</li>
+                            </ul>
+                        `
+                    },
+                    { title: "Goal", content: "Be the first team to correctly follow the sequential trail of clues and locate the hidden Treasure." },
+                    { title: "Key Rules", content: "Cheating is not allowed. Solve clues in order; skipping is forbidden. Stay within designated campus boundaries." },
+                    { title: "Coordinators", content: "Womika Gaidhani: 8767852563, Arya Junghare: 8379886764, Aaryan Vidhate: 9373818556, Tejas Khapekar: 7276611251" }
+                ]
+            }
+        ];
+
+        // 2. DOM Elements and Utility Functions
+        const grid = document.getElementById('events-grid');
+        const modal = document.getElementById('event-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+
+        /**
+         * Generates the HTML for a single event card on the homepage, now including the poster image.
+         * @param {Object} event - The event data object.
+         * @param {number} index - The index of the event in the array.
+         */
+        const createEventCard = (event, index) => {
+            return `
+                <div class="${event.color} p-0.5 rounded-xl shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 cursor-pointer" onclick="openModal(${index})">
+                    <div class="bg-white rounded-xl h-full flex flex-col">
+                        
+                        
+<div class="h-40 overflow-hidden rounded-t-xl">
+                            
+<img src="${event.posterUrl}" alt="${event.name} Event Poster" class="w-full h-full object-cover">
+                        </div>
+
+                        
+<div class="p-5 flex flex-col justify-between flex-grow">
+                            <div>
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <i data-lucide="${event.icon}" class="w-6 h-6 ${event.color.replace('bg-', 'text-')} flex-shrink-0"></i>
+                                    <h3 class="text-xl font-semibold text-gray-800">${event.name}</h3>
+                                </div>
+                                <p class="text-gray-600 text-sm line-clamp-3">${event.description}</p>
+                            </div>
+                            <button class="mt-4 w-full ${event.color} text-white py-2 rounded-lg font-medium transition-colors hover:bg-opacity-90">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        /**
+         * Populates the modal with the selected event's details.
+         * @param {Object} event - The event data object.
+         */
+        const populateModal = (event) => {
+            modalTitle.textContent = event.name;
+
+            // Generate content for the detail sections
+            let contentHTML = `<p class="text-lg text-center text-gray-600 mb-8">${event.description}</p>`;
+
+            event.details.forEach(detail => {
+                contentHTML += `
+                    <div class="mb-6 p-4 rounded-lg bg-gray-100 border border-gray-200">
+                        <h4 class="text-xl font-bold mb-2 ${event.color.replace('bg-', 'text-')}">${detail.title}</h4>
+                        <div class="text-gray-800 text-base leading-relaxed detail-content">
+                            ${detail.content}
+                        </div>
+                    </div>
+                `;
+            });
+
+            modalContent.innerHTML = contentHTML;
+            // Re-render lucide icons inside the modal
+            lucide.createIcons();
+        };
+
+        /**
+         * Opens the detail modal for a given event index.
+         * @param {number} index - The index of the event in the eventsData array.
+         */
+        window.openModal = (index) => {
+            const event = eventsData[index];
+            if (event) {
+                populateModal(event);
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.classList.add('overflow-hidden'); // Prevent body scrolling
+            }
+        };
+
+        /**
+         * Closes the detail modal.
+         */
+        window.closeModal = (event) => {
+            // Only close if clicked on the overlay or the close button, not the modal content itself
+            if (!event || event.target.id === 'event-modal') {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.classList.remove('overflow-hidden');
+            }
+        };
+
+
+        // 3. Initialization Function
+        const init = () => {
+            // Generate all event cards and append them to the grid
+            grid.innerHTML = eventsData.map((event, index) => createEventCard(event, index)).join('');
+            // Re-render lucide icons after injecting HTML
+            lucide.createIcons();
+        };
+
+        // Run initialization when the script loads
+        init();
+
+
+        // --- FIREBASE VISIT COUNTER LOGIC ---
+        let app;
+        let db;
+        let auth;
+        
+        // Global variables provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Set Firestore log level to Debug for visibility
+        setLogLevel('Debug');
+        
+        if (firebaseConfig) {
+            // 4. Initialize Firebase
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // 5. Visit Counter Logic
+            const updateAndDisplayVisitCounter = async () => {
+                if (!db) {
+                    console.error("Firestore not initialized.");
+                    return;
+                }
+
+                const counterDiv = document.getElementById('visit-counter');
+                // Path for public, globally visible data
+                const counterDocRef = doc(db, 
+                    'artifacts', appId, 
+                    'public', 'data', 
+                    'visit_counters', 
+                    'events_website' // Unique key for this counter
+                );
+
+                try {
+                    // Use a transaction to safely read and increment the count
+                    const newCount = await runTransaction(db, async (transaction) => {
+                        const counterDoc = await transaction.get(counterDocRef);
+
+                        let currentCount = 0;
+                        if (counterDoc.exists()) {
+                            currentCount = counterDoc.data().count || 0;
+                        }
+
+                        const nextCount = currentCount + 1;
+                        
+                        // Set/Update the document with the new count
+                        transaction.set(counterDocRef, { count: nextCount }, { merge: true });
+                        
+                        return nextCount;
+                    });
+                    
+                    // Display the updated count
+                    counterDiv.textContent = newCount;
+                    console.log("Visit count incremented to:", newCount);
+
+                } catch (e) {
+                    console.error("Transaction failed: ", e);
+                    counterDiv.textContent = 'Err';
+                }
+            };
+
+            // 6. Authenticate User and run counter update
+            const authenticate = async () => {
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                    // After successful auth, run the counter update
+                    updateAndDisplayVisitCounter(); 
+                } catch (error) {
+                    console.error("Firebase Auth Error:", error);
+                }
+            };
+
+            authenticate();
+        } else {
+            document.getElementById('visit-counter').textContent = '—';
+        }
+        
+    </script>
+</body>
+</html>
